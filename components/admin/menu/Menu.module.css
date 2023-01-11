@@ -1,0 +1,16 @@
+.menu{
+    position: fixed;
+    width: 300px;
+    height: 500px;
+    /* background: #000; */
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    right: 0;
+    top: calc(50% - 250px);
+    padding: 10px;
+}
+
+.items{
+    list-style-type: none;
+}
