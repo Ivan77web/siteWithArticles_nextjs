@@ -154,7 +154,7 @@ const Instruments: React.FC<IInstrumentsProps> = ({
 
                 <div className={cl.selectBlock}>
                     <Select
-                        defaultValue={optionsFontSize[4]}
+                        defaultValue={optionsFontSize[3]}
                         onChange={setFontSizeValue}
                         options={optionsFontSize}
                     />

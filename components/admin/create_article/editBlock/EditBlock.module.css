@@ -1,0 +1,109 @@
+.window {
+    width: 200px;
+    height: fit-content;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.input {
+    padding-left: 10px;
+    min-height: 38px;
+    width: 100%;
+    outline: 0 !important;
+    background-color: hsl(0, 0%, 100%);
+    border-color: hsl(0, 0%, 80%);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    font-size: 18px;
+    color: hsl(0, 0%, 20%);
+    font-weight: 400;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.input:focus{
+    border: 2px solid #2684FF;
+}
+
+.select{
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.italics{
+    width: 100%;
+    height: 38px;  
+    border: 1px solid rgb(189, 189, 189);
+    border-radius: 4px;
+    line-height: 38px;
+    text-align: center;
+    font-size: 18px;
+    color: hsl(0, 0%, 20%);
+    font-weight: 400;
+    margin-bottom: 30px;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.button_italics_active{
+    width: 100%;
+    height: 38px;  
+    border: 1px solid #2684FF;
+    border-radius: 4px;
+    line-height: 38px;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    background: #2684FF;
+    font-weight: 400;
+    margin-bottom: 30px;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 40px;
+}
+
+.btn_cancel{
+    width: 95px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.btn_save{
+    width: 95px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}

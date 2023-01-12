@@ -1,0 +1,21 @@
+.map {
+    position: absolute;
+    top: 600px;
+    left: 0;
+    width: 300px;
+    /* height: fit-content; */
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.intro{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.elem{
+    width: 250px;
+    margin: 0 auto;
+}

@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import ArticleMap from "./articleMap/ArticleMap";
 import cl from "./Create_article.module.css"
 import Instruments from "./instruments/Instruments";
 
-interface IOneBlock {
+export interface IOneBlock {
     type: string,
     fileValue?: File,
     value?: string,
@@ -45,14 +46,6 @@ const Create_article = () => {
         addPhotoOnArticle(curFiles[0])
     }
 
-    // ----------------------
-
-
-
-
-
-
-
     const addBlockOnArticle = () => {
         if (inputValue) {
             const newBlock: IOneBlock = {
@@ -80,6 +73,7 @@ const Create_article = () => {
             type: "photo",
             id: article ? article.length : 1,
             fileValue: fileValue,
+            indent: indent,
         }
 
         setArticle([...article, newBlock]);
@@ -90,6 +84,10 @@ const Create_article = () => {
             setFontSize(fontSizeValue.label)
         }
     }, [fontSizeValue])
+
+    useEffect( () => {
+        console.log(article);
+    }, [article])
 
     return (
         <div className={cl.create_article}>
@@ -102,6 +100,8 @@ const Create_article = () => {
                     optionsFontSize={optionsFontSize}
                     setFontSizeValue={setFontSizeValue}
                 />
+
+                <ArticleMap article={article} setArticle={setArticle}/>
             </div>
 
             <div className={cl.pageOfArticle}>
@@ -162,6 +162,20 @@ const Create_article = () => {
                             } else if (elem.type === "photo") {
                                 return (
                                     <div key={elem.id}>
+                                        <div
+                                            className={
+                                                elem.indent === "small"
+                                                    ?
+                                                    cl.indentSmall
+                                                    :
+                                                    elem.indent === "normal"
+                                                        ?
+                                                        cl.indentNormal
+                                                        :
+                                                        cl.indentBig
+                                            }
+                                        ></div>
+
                                         <img className={cl.photoOnArticle} src={window.URL.createObjectURL(elem.fileValue)} />
                                     </div>
                                 )
