@@ -86,10 +86,7 @@ const EditBlock: React.FC<IEditBlockProps> = ({ article, setArticle, id, setIsOp
         newArticle[id].indent = indent;
         newArticle[id].italics = italics;
         newArticle[id].fontSize = fontSize;
-
-        console.log(newArticle);
-        
-
+    
         setArticle([...newArticle]);
     }
 

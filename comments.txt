@@ -4,3 +4,32 @@
 5) Ссылки встроенные в параграф
 
 Ширина статьи 650 
+
+
+
+
+
+
+
+
+
+Работа с БД
+
+    import firestore from "../firebase/clientApp"
+    import { useCollectionData } from "react-firebase-hooks/firestore";
+
+    import { setDoc, doc } from "firebase/firestore"; Добавление документа с известным ID
+    import { addDoc, collection } from "firebase/firestore"; Добавление документа с неизвестным ID
+
+    Получение данных
+
+    const [test, loadingTest] = useCollectionData<ITest>(
+        firestore.collection("test")
+    )
+
+
+    Отправка данных
+
+    await setDoc(doc(firestore, "test", `test2`), {testOne: "hello"}); - С известным ID
+
+    await addDoc(collection(firestore, "articles"), { article: article }); - С неизвестным ID

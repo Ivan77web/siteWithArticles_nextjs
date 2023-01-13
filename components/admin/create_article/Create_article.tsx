@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ArticleMap from "./articleMap/ArticleMap";
 import cl from "./Create_article.module.css"
 import Instruments from "./instruments/Instruments";
+import ModalWindow from "./modalWindow/ModalWindow";
 
 export interface IOneBlock {
     type: string,
@@ -18,6 +19,7 @@ export interface IOneBlock {
 const Create_article = () => {
     const [article, setArticle] = useState<IOneBlock[]>([]);
     const [inputValue, setInputValue] = useState("");
+    const [isOpenModalWindow, setIsOpenModalWindow] = useState(false);
 
     //Instruments
     const [thickness, setThickness] = useState("regular");
@@ -85,24 +87,23 @@ const Create_article = () => {
         }
     }, [fontSizeValue])
 
-    useEffect( () => {
-        console.log(article);
-    }, [article])
+
 
     return (
         <div className={cl.create_article}>
-            <div className={cl.instruments}>
-                <Instruments
-                    thickness={thickness} setThickness={setThickness}
-                    location={location} setLocation={setLocation}
-                    indent={indent} setIndent={setIndent}
-                    italics={italics} setItalics={setItalics}
-                    optionsFontSize={optionsFontSize}
-                    setFontSizeValue={setFontSizeValue}
-                />
+            {isOpenModalWindow && <ModalWindow setIsOpenModalWindow={setIsOpenModalWindow} article={article}/>}
 
-                <ArticleMap article={article} setArticle={setArticle}/>
-            </div>
+            <Instruments
+                thickness={thickness} setThickness={setThickness}
+                location={location} setLocation={setLocation}
+                indent={indent} setIndent={setIndent}
+                italics={italics} setItalics={setItalics}
+                optionsFontSize={optionsFontSize}
+                setFontSizeValue={setFontSizeValue}
+                setIsOpenModalWindow={setIsOpenModalWindow}
+            />
+
+            <ArticleMap article={article} setArticle={setArticle} />
 
             <div className={cl.pageOfArticle}>
                 {

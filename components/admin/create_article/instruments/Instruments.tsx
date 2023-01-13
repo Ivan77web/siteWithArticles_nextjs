@@ -13,6 +13,7 @@ interface IInstrumentsProps{
     setItalics: (value: boolean) => void,
     optionsFontSize: any, 
     setFontSizeValue: any,
+    setIsOpenModalWindow: (value: boolean) => void,
 }
 
 const Instruments: React.FC<IInstrumentsProps> = ({
@@ -21,6 +22,7 @@ const Instruments: React.FC<IInstrumentsProps> = ({
     indent, setIndent,
     italics, setItalics,
     optionsFontSize, setFontSizeValue,
+    setIsOpenModalWindow
 }) => {
 
     return (
@@ -159,6 +161,10 @@ const Instruments: React.FC<IInstrumentsProps> = ({
                         options={optionsFontSize}
                     />
                 </div>
+            </div>
+
+            <div className={cl.btnPublish} onClick={() => setIsOpenModalWindow(true)}>
+                Опубликовать
             </div>
         </div>
     )

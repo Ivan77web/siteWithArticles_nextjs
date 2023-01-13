@@ -9,21 +9,9 @@
     left: 0;
     top: calc(50% - 250px);
     padding: 10px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }
-
-.instruments {
-    position: absolute;
-    width: 300px;
-    height: 500px;
-    background: white;
-    border-bottom: 1px solid gray;
-    border-top: 1px solid gray;
-    border-right: 1px solid gray;
-    left: 0;
-    top: 0;
-    padding: 10px;
-}
-
 
 .text_setting {
     text-align: center;
@@ -32,26 +20,26 @@
 .button_setting {
     width: 100px;
     height: 30px;
-    border: 1px solid teal;
+    border: 1px solid #2684FF;
     text-align: center;
     line-height: 30px;
     cursor: pointer;
 
     -webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .button_setting_active {
     width: 100px;
     height: 30px;
-    border: 1px solid teal;
+    border: 1px solid #2684FF;
     text-align: center;
     line-height: 30px;
     cursor: pointer;
-    background: teal;
+    background: #2684FF;
     color: white;
 }
 
@@ -98,28 +86,24 @@
     margin-top: 10px;
 }
 
-.button_small_indent{
+.button_small_indent {
     width: 80px;
 }
 
-.button_normal_indent{
+.button_normal_indent {
     width: 80px;
 }
 
-.button_big_indent{
+.button_big_indent {
     width: 80px;
 }
 
-
-
-.button_italics{
+.button_italics {
     margin: 0 auto;
     font-style: italic;
 }
 
-
-
-.font_size{
+.font_size {
     display: flex;
     width: fit-content;
     margin: 0 auto;
@@ -127,11 +111,26 @@
     margin-bottom: 20px;
 }
 
-.fontsizeText{
+.fontsizeText {
     margin-right: 10px;
     line-height: 38px;
 }
 
-.selectBlock{
+.selectBlock {
     width: 100px;
+}
+
+.btnPublish {
+    position: absolute;
+    left: 50px;
+    top: 520px;
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    border-radius: 5px;
+    background: #2684FF;
+    cursor: pointer;
 }
