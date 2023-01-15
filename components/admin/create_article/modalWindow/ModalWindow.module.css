@@ -29,12 +29,68 @@
     cursor: default;
 }
 
+.windowFull{
+    position: relative;
+    width: 700px;
+    height: 600px;
+    background: white;
+    border-radius: 10px;
+    text-align: center;
+    padding-top: 70px;
+    cursor: default;
+}
+
+.input{
+    width: 90%;
+    margin: 0 auto;
+    border: none;
+    height: 40px;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 20px;
+    /* border: 2px solid rgb(173, 173, 173); */
+    border: 1px solid rgb(204, 204, 204);
+    outline-width: 1px;
+    outline-color: rgb(38, 132, 255);;
+}
+
+.select{
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.photoForm{
+    position: relative;
+    margin-top: 30px;
+}
+
+.photoCover{
+    width: 90%;
+    height: 250px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+}
+
+.photo{
+    height: 240px;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+.button_add_photo{
+}
+
 .buttons{
+    position: absolute;
     display: flex;
     justify-content: space-between;
     width: 350px;
-    margin: 0 auto;
-    margin-top: 130px;
+    bottom: 20px;
+    left: calc(50% - 175px);
 }
 
 .btn{

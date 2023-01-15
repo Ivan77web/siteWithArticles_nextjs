@@ -4,6 +4,11 @@ import cl from "./Create_article.module.css"
 import Instruments from "./instruments/Instruments";
 import ModalWindow from "./modalWindow/ModalWindow";
 
+// export interface IArticleFull{
+//     blocks: IOneBlock[],
+//     title: ITitleArticle
+// }
+
 export interface IOneBlock {
     type: string,
     fileValue?: File,
@@ -16,8 +21,15 @@ export interface IOneBlock {
     fontSize?: number
 }
 
+// export interface ITitleArticle{
+//     header: string,
+//     coverPhoto: File,
+//     tags: string[],
+// }
+
 const Create_article = () => {
     const [article, setArticle] = useState<IOneBlock[]>([]);
+    // const [article, setArticle] = useState<IArticleFull>();
     const [inputValue, setInputValue] = useState("");
     const [isOpenModalWindow, setIsOpenModalWindow] = useState(false);
 
@@ -54,6 +66,7 @@ const Create_article = () => {
                 type: "text",
                 value: inputValue,
                 id: article ? article.length : 1,
+                // id: article ? article.blocks.length : 1,
                 thickness: thickness,
                 location: location,
                 indent: indent,
@@ -86,8 +99,6 @@ const Create_article = () => {
             setFontSize(fontSizeValue.label)
         }
     }, [fontSizeValue])
-
-
 
     return (
         <div className={cl.create_article}>
