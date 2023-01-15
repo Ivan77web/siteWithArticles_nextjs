@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { IOneBlock } from "../Create_article";
+import { IArticleFull, IOneBlock } from "../Create_article";
 import cl from "./EditBlock.module.css"
 import Select from "react-select";
 
 interface IEditBlockProps {
-    article: IOneBlock[],
-    setArticle: (value: IOneBlock[]) => void,
+    article: IArticleFull,
+    setArticle: (value: IArticleFull) => void,
     id: number,
     setIsOpenEditor: (value: boolean) => void,
 }
@@ -78,16 +78,17 @@ const EditBlock: React.FC<IEditBlockProps> = ({ article, setArticle, id, setIsOp
 
     // Обновление блока
     const updateArticle = (id: number) => {
-        let newArticle = article;
+        let newArticle: IArticleFull;
+        newArticle.title = article.title
 
-        newArticle[id].value = inputValue;
-        newArticle[id].thickness = thickness;
-        newArticle[id].location = location;
-        newArticle[id].indent = indent;
-        newArticle[id].italics = italics;
-        newArticle[id].fontSize = fontSize;
+        newArticle.blocks[id].value = inputValue;
+        newArticle.blocks[id].thickness = thickness;
+        newArticle.blocks[id].location = location;
+        newArticle.blocks[id].indent = indent;
+        newArticle.blocks[id].italics = italics;
+        newArticle.blocks[id].fontSize = fontSize;
     
-        setArticle([...newArticle]);
+        setArticle(newArticle);
     }
 
     useEffect(() => {

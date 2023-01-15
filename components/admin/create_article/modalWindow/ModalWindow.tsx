@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IOneBlock } from "../Create_article";
+import { IArticleFull, IOneBlock } from "../Create_article";
 import cl from "./ModalWindow.module.css"
 import firestore from "../../../../firebase/clientApp"
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -10,10 +10,10 @@ import Select from "react-select";
 import { tagsOptions } from "./tagsOptions";
 import makeAnimated from 'react-select/animated';
 
-
 interface IModalWindowProps {
     setIsOpenModalWindow: (value: boolean) => void,
-    article: IOneBlock[],
+    article: IArticleFull,
+    setArticle: (value: IArticleFull) => void,
 }
 
 interface INumberOfArticles {
@@ -25,7 +25,7 @@ interface IOption {
     label: string
 }
 
-const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, article }) => {
+const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, article, setArticle }) => {
     const storage = getStorage();
     const route = useRouter();
 
@@ -36,13 +36,13 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
 
     // название статьи
     const [nameArticle, setNameArticle] = useState("");
+    const refInputNameArticle = useRef(null);
 
     //photo
-
+    const [photo, setPhoto] = useState<File>(null);
     const photoBlockRef = useRef(null);
-
-
-
+    const refPhotoCover = useRef(null);
+    const inputPhotoRef = useRef<HTMLInputElement>(null);
 
     const [numberOfArticles, loadingNumber] = useCollectionData<INumberOfArticles>(
         firestore.collection("number_of_articles")
@@ -54,46 +54,50 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
         }
     }
 
-    const inputPhotoRef = useRef<HTMLInputElement>(null);
-
     function updateImageDisplay() {
         const curFiles = inputPhotoRef.current.files;
-        console.log(curFiles);
         photoBlockRef.current.src = window.URL.createObjectURL(curFiles[0])
-        // setPhoto()
-        // addPhotoOnArticle(curFiles[0])
+        setPhoto(curFiles[0]);
     }
 
-    // const addPhotoOnArticle = (fileValue: File) => {
-    //     const newBlock: IOneBlock = {
-    //         type: "photo",
-    //         id: article ? article.length : 1,
-    //         fileValue: fileValue,
-    //         indent: indent,
-    //     }
-
-    //     setArticle([...article, newBlock]);
-    // }
-
     const sendArticle = async () => {
-        const photos = article.filter(elem => elem.type === "photo") || [];
-        let textData = article
-
-        textData.map(elem => {
-            if (elem.type === "photo") {
-                delete elem.fileValue
-            }
-        })
-
-        for (let i = 0; i < photos.length; i++) {
-            const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_${photos[i].id}`);
-            uploadBytes(storageRef, photos[i].fileValue);
+        if (!nameArticle) {
+            refInputNameArticle.current.style.border = "1px solid rgb(164, 0, 0)"
         }
 
-        await setDoc(doc(firestore, "articles", `articles_${numberOfArticles[0].number + 1}`), { article: textData });
-        await setDoc(doc(firestore, "number_of_articles", `number`), { number: numberOfArticles[0].number + 1 });
+        if (!inputPhotoRef.current.files[0]) {
+            refPhotoCover.current.style.border = "1px solid rgb(164, 0, 0)"
+        }
 
-        route.push("/admin")
+        if (nameArticle && tags && inputPhotoRef.current.files[0]) {
+            const photos = article.blocks.filter(elem => elem.type === "photo") || [];
+            let textData = article.blocks
+
+            textData.map(elem => {
+                if (elem.type === "photo") {
+                    delete elem.fileValue
+                }
+            })
+
+            const objArticle = {
+                blocks: textData,
+                title: article.title.header,
+                tags: article.title.tags
+            }
+
+            for (let i = 0; i < photos.length; i++) {
+                const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_${photos[i].id}`);
+                uploadBytes(storageRef, photos[i].fileValue);
+            }
+
+            const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_mainPhoto`);
+            uploadBytes(storageRef, article.title.coverPhoto);
+
+            await setDoc(doc(firestore, "articles", `articles_${numberOfArticles[0].number + 1}`), { article: objArticle });
+            await setDoc(doc(firestore, "number_of_articles", `number`), { number: numberOfArticles[0].number + 1 });
+
+            route.push("/admin")
+        }
     }
 
     useEffect(() => {
@@ -108,12 +112,33 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
         }
     }, [tagsValue])
 
+    useEffect( () => {
+        let newArticle : IArticleFull = article;
+        newArticle.title.header = nameArticle
+
+        setArticle(newArticle);
+    }, [nameArticle])
+
+    useEffect( () => {
+        let newArticle : IArticleFull = article;
+        newArticle.title.tags = tags;
+
+        setArticle(newArticle);
+    }, [tags])
+
+    useEffect( () => {
+        let newArticle : IArticleFull = article;
+        newArticle.title.coverPhoto = photo;
+
+        setArticle(newArticle);
+    }, [photo])
+
     return (
         <div className={cl.app} onClick={e => closeWindow(e)}>
             {
                 !loadingNumber
                     ?
-                    article.length
+                    article.blocks.length
                         ?
                         <div className={cl.windowFull}>
                             <div>
@@ -122,6 +147,7 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
                                     placeholder="Название статьи"
                                     value={nameArticle}
                                     onChange={e => setNameArticle(e.target.value)}
+                                    ref={refInputNameArticle}
                                 />
 
                                 <div className={cl.select}>
@@ -137,7 +163,7 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
                                     />
                                 </div>
 
-                                <div className={cl.photoCover}>
+                                <div className={cl.photoCover} ref={refPhotoCover}>
                                     <img className={cl.photo} ref={photoBlockRef} />
                                 </div>
 

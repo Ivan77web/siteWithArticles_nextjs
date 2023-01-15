@@ -1,11 +1,11 @@
 import React from "react";
 import cl from "./ArticleMap.module.css"
-import { IOneBlock } from "../Create_article";
+import { IArticleFull, IOneBlock } from "../Create_article";
 import MapElem from "../mapElem/MapElem";
 
 interface IArticleMapProps {
-    article: IOneBlock[]
-    setArticle: (value: IOneBlock[]) => void
+    article: IArticleFull,
+    setArticle: (value: IArticleFull) => void
 }
 
 const ArticleMap: React.FC<IArticleMapProps> = ({ article, setArticle }) => {
@@ -14,7 +14,7 @@ const ArticleMap: React.FC<IArticleMapProps> = ({ article, setArticle }) => {
             <p className={cl.intro}>Карта статьи</p>
 
             {
-                article.map(elem =>
+                article.blocks.map(elem =>
                     <div key={elem.id}>
                         <MapElem
                             elem={elem}

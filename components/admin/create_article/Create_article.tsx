@@ -4,10 +4,10 @@ import cl from "./Create_article.module.css"
 import Instruments from "./instruments/Instruments";
 import ModalWindow from "./modalWindow/ModalWindow";
 
-// export interface IArticleFull{
-//     blocks: IOneBlock[],
-//     title: ITitleArticle
-// }
+export interface IArticleFull {
+    blocks: IOneBlock[],
+    title: ITitleArticle
+}
 
 export interface IOneBlock {
     type: string,
@@ -21,15 +21,22 @@ export interface IOneBlock {
     fontSize?: number
 }
 
-// export interface ITitleArticle{
-//     header: string,
-//     coverPhoto: File,
-//     tags: string[],
-// }
+export interface ITitleArticle {
+    header: string,
+    coverPhoto: File,
+    tags: string[],
+}
 
 const Create_article = () => {
-    const [article, setArticle] = useState<IOneBlock[]>([]);
-    // const [article, setArticle] = useState<IArticleFull>();
+    // const [article, setArticle] = useState<IOneBlock[]>([]);
+    const [article, setArticle] = useState<IArticleFull>({
+        blocks:[],
+        title: {
+            header: "",
+            coverPhoto: null,
+            tags: [], 
+        }
+    });
     const [inputValue, setInputValue] = useState("");
     const [isOpenModalWindow, setIsOpenModalWindow] = useState(false);
 
@@ -65,8 +72,8 @@ const Create_article = () => {
             const newBlock: IOneBlock = {
                 type: "text",
                 value: inputValue,
-                id: article ? article.length : 1,
-                // id: article ? article.blocks.length : 1,
+                // id: article ? article.length : 1,
+                id: article ? article.blocks.length : 1,
                 thickness: thickness,
                 location: location,
                 indent: indent,
@@ -74,7 +81,11 @@ const Create_article = () => {
                 fontSize: fontSize
             }
 
-            setArticle([...article, newBlock]);
+            let newArticle = article;
+
+            newArticle.blocks = [...article.blocks, newBlock];
+
+            setArticle(newArticle);
             setInputValue("");
             setThickness("regular");
             setLocation("left");
@@ -86,12 +97,15 @@ const Create_article = () => {
     const addPhotoOnArticle = (fileValue: File) => {
         const newBlock: IOneBlock = {
             type: "photo",
-            id: article ? article.length : 1,
+            id: article ? article.blocks.length : 1,
             fileValue: fileValue,
             indent: indent,
         }
 
-        setArticle([...article, newBlock]);
+        setArticle((prevState) => ({
+            ...prevState,
+            blocks: [...article.blocks, newBlock]
+        }));
     }
 
     useEffect(() => {
@@ -102,7 +116,7 @@ const Create_article = () => {
 
     return (
         <div className={cl.create_article}>
-            {isOpenModalWindow && <ModalWindow setIsOpenModalWindow={setIsOpenModalWindow} article={article}/>}
+            {isOpenModalWindow && <ModalWindow setIsOpenModalWindow={setIsOpenModalWindow} article={article} setArticle={setArticle}/>}
 
             <Instruments
                 thickness={thickness} setThickness={setThickness}
@@ -118,9 +132,9 @@ const Create_article = () => {
 
             <div className={cl.pageOfArticle}>
                 {
-                    article.length
+                    article.blocks.length
                         ?
-                        article.map((elem: IOneBlock) => {
+                        article.blocks.map((elem: IOneBlock) => {
                             if (elem.type === "text") {
                                 return (
                                     <div

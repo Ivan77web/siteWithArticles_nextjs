@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { IOneBlock } from "../Create_article";
+import { IArticleFull, IOneBlock } from "../Create_article";
 import EditBlock from "../editBlock/EditBlock";
 import cl from "./MapElem.module.css"
 
 interface IMapElemProps {
     elem: IOneBlock,
-    article: IOneBlock[],
-    setArticle: (value: IOneBlock[]) => void,
+    article: IArticleFull,
+    setArticle: (value: IArticleFull) => void,
 }
 
 const MapElem: React.FC<IMapElemProps> = ({ elem, article, setArticle }) => {
@@ -15,10 +15,14 @@ const MapElem: React.FC<IMapElemProps> = ({ elem, article, setArticle }) => {
     const deleteBlock = (id: number) => {
         const oldArticle = article;
 
-        let newArticle = oldArticle.filter(elem => elem.id !== id);
+        let newArticle : IArticleFull;
 
-        if (newArticle?.length) {
-            for (let i = 0; i < newArticle.length; i++) {
+        newArticle.title = article.title
+
+        newArticle.blocks = oldArticle.blocks.filter(elem => elem.id !== id);
+
+        if (newArticle.blocks?.length) {
+            for (let i = 0; i < newArticle.blocks.length; i++) {
                 newArticle[i].id = i;
             }
         }
