@@ -1,7 +1,7 @@
-Виды текста в конструкторе
-
-4) Ссылки
-5) Ссылки встроенные в параграф
+Задачи:
+1) Ссылки
+2) Ссылки встроенные в параграф
+3) При навадении на крату статьи углы не скругляются
 
 Ширина статьи 650 
 
@@ -11,24 +11,76 @@
 
 Работа с БД
 
+    --------Получение данных--------
+
     import firestore from "../firebase/clientApp"
-    import { useCollectionData } from "react-firebase-hooks/firestore";
+    import { useCollectionData } from "react-firebase-hooks/firestore"; 
 
-    import { setDoc, doc } from "firebase/firestore"; Добавление документа с известным ID
-    import { addDoc, collection } from "firebase/firestore"; Добавление документа с неизвестным ID
-
-    Получение данных
+    ------ Текст
 
     const [test, loadingTest] = useCollectionData<ITest>(
         firestore.collection("test")
     )
 
+    ------ Фото
+    const storage = getStorage();
+    const [srcArr, setSrcArr] = useState<string[]>([]);
 
-    Отправка данных
+    useEffect(() => {
+        let newArr: string[] = [];
+
+        for(let i = 0; i < adv.numberOfPhotos; i++){
+
+            getDownloadURL(ref(storage, `adv_${adv.userId}_${adv.advId}_${i}`)).then((url) => {
+                newArr[i] = url
+            }).then(() => {
+                if(newArr.length === adv.numberOfPhotos){
+                    setSrcArr(newArr);
+                }
+            });
+        }
+    }, [])
+
+
+
+
+
+
+
+
+    --------Отправка данных--------
+
+    import { setDoc, doc } from "firebase/firestore"; Добавление документа с известным ID
+    import { addDoc, collection } from "firebase/firestore"; Добавление документа с неизвестным ID
+
 
     await setDoc(doc(firestore, "test", `test2`), {testOne: "hello"}); - С известным ID
 
     await addDoc(collection(firestore, "articles"), { article: article }); - С неизвестным ID
+
+
+
+
+
+
+
+Работа с MobX пример
+
+    import { makeAutoObservable } from "mobx";
+
+    class AllArticles{
+        allArticles = [];
+
+        constructor(){
+            makeAutoObservable(this);
+        }
+
+        loadAllArticles(articles){
+            this.allArticles = articles
+        }
+    }
+
+    export default new AllArticles();
 
 
 

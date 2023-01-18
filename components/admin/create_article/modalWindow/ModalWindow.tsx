@@ -70,19 +70,29 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
         }
 
         if (nameArticle && tags && inputPhotoRef.current.files[0]) {
-            const photos = article.blocks.filter(elem => elem.type === "photo") || [];
-            let textData = article.blocks
+            let photos = [];
+            let textData = [];
 
-            textData.map(elem => {
-                if (elem.type === "photo") {
-                    delete elem.fileValue
+            article.blocks.map(block => {
+                if (block.type === "photo") {
+                    const blockPhotoObj = {
+                        id: block.id,
+                        indent: block.indent,
+                        type: block.type,
+                    }
+
+                    textData.push(blockPhotoObj);
+                    photos.push(block);
+                } else{
+                    textData.push(block);
                 }
             })
 
             const objArticle = {
                 blocks: textData,
                 title: article.title.header,
-                tags: article.title.tags
+                tags: article.title.tags,
+                id: numberOfArticles[0].number + 1
             }
 
             for (let i = 0; i < photos.length; i++) {
@@ -112,22 +122,22 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
         }
     }, [tagsValue])
 
-    useEffect( () => {
-        let newArticle : IArticleFull = article;
+    useEffect(() => {
+        let newArticle: IArticleFull = article;
         newArticle.title.header = nameArticle
 
         setArticle(newArticle);
     }, [nameArticle])
 
-    useEffect( () => {
-        let newArticle : IArticleFull = article;
+    useEffect(() => {
+        let newArticle: IArticleFull = article;
         newArticle.title.tags = tags;
 
         setArticle(newArticle);
     }, [tags])
 
-    useEffect( () => {
-        let newArticle : IArticleFull = article;
+    useEffect(() => {
+        let newArticle: IArticleFull = article;
         newArticle.title.coverPhoto = photo;
 
         setArticle(newArticle);

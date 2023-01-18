@@ -15,7 +15,16 @@ const MapElem: React.FC<IMapElemProps> = ({ elem, article, setArticle }) => {
     const deleteBlock = (id: number) => {
         const oldArticle = article;
 
-        let newArticle : IArticleFull;
+        let newArticle: IArticleFull = {
+            title: {
+                header: "",
+                coverPhoto: null,
+                tags: [],
+                id: null
+            },
+
+            blocks: []
+        };
 
         newArticle.title = article.title
 
@@ -23,7 +32,7 @@ const MapElem: React.FC<IMapElemProps> = ({ elem, article, setArticle }) => {
 
         if (newArticle.blocks?.length) {
             for (let i = 0; i < newArticle.blocks.length; i++) {
-                newArticle[i].id = i;
+                newArticle.blocks[i].id = i;
             }
         }
 

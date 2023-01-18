@@ -11,7 +11,7 @@ export interface IArticleFull {
 
 export interface IOneBlock {
     type: string,
-    fileValue?: File,
+    fileValue?: File | null,
     value?: string,
     id: number,
     thickness?: string,
@@ -25,16 +25,17 @@ export interface ITitleArticle {
     header: string,
     coverPhoto: File,
     tags: string[],
+    id: number
 }
 
 const Create_article = () => {
-    // const [article, setArticle] = useState<IOneBlock[]>([]);
     const [article, setArticle] = useState<IArticleFull>({
         blocks:[],
         title: {
             header: "",
             coverPhoto: null,
             tags: [], 
+            id: 0,
         }
     });
     const [inputValue, setInputValue] = useState("");
@@ -72,7 +73,6 @@ const Create_article = () => {
             const newBlock: IOneBlock = {
                 type: "text",
                 value: inputValue,
-                // id: article ? article.length : 1,
                 id: article ? article.blocks.length : 1,
                 thickness: thickness,
                 location: location,

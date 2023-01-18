@@ -5,7 +5,6 @@ const top = () => {
     return (
         <MainContainer>
             <div className="container">
-                Лучшее
                 <Articles/>
             </div>
         </MainContainer>

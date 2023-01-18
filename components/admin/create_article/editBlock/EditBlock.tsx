@@ -16,7 +16,7 @@ interface IOneOption {
 }
 
 const EditBlock: React.FC<IEditBlockProps> = ({ article, setArticle, id, setIsOpenEditor }) => {
-    const block = article[id];
+    const block = article.blocks[id];
 
     // Новые значения блока
     const [inputValue, setInputValue] = useState(block.value);
@@ -78,17 +78,22 @@ const EditBlock: React.FC<IEditBlockProps> = ({ article, setArticle, id, setIsOp
 
     // Обновление блока
     const updateArticle = (id: number) => {
-        let newArticle: IArticleFull;
-        newArticle.title = article.title
+        let blocks: IOneBlock[] = article.blocks;
 
-        newArticle.blocks[id].value = inputValue;
-        newArticle.blocks[id].thickness = thickness;
-        newArticle.blocks[id].location = location;
-        newArticle.blocks[id].indent = indent;
-        newArticle.blocks[id].italics = italics;
-        newArticle.blocks[id].fontSize = fontSize;
-    
+        blocks[id].value = inputValue;
+        blocks[id].thickness = thickness;
+        blocks[id].location = location;
+        blocks[id].indent = indent;
+        blocks[id].italics = italics;
+        blocks[id].fontSize = fontSize;
+
+        const newArticle: IArticleFull = {
+            title: article.title,
+            blocks: blocks
+        }
+
         setArticle(newArticle);
+        setIsOpenEditor(false);
     }
 
     useEffect(() => {
