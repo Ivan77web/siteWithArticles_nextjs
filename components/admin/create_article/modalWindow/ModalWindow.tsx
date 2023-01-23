@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IArticleFull, IOneBlock } from "../Create_article";
+import { IArticleFull } from "../Create_article";
 import cl from "./ModalWindow.module.css"
 import firestore from "../../../../firebase/clientApp"
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { setDoc, doc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useRouter } from "next/router";
 import Select from "react-select";
 import { tagsOptions } from "./tagsOptions";
@@ -44,6 +44,15 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
     const refPhotoCover = useRef(null);
     const inputPhotoRef = useRef<HTMLInputElement>(null);
 
+    // src
+    const [srcMainPhoto, setSrcMainPhoto] = useState<string>("");
+    const [srcPhotos, setSrcPhotos] = useState<string[]>([]);
+    const [isContinueAfterLoadingPhotos, setIsContinueAfterLoadingPhotos] = useState(false);
+    const [isContinueAfterLoadingMainPhoto, setIsContinueAfterLoadingMainPhoto] = useState(false);
+    const [isEndLoadingPhotos, setIsEndLoadingPhotos] = useState(false);
+    const [isEndLoadingMainPhoto, setIsEndLoadingMainPhoto] = useState(false);
+    const [photosTest, setPhotosTest] = useState([]);
+
     const [numberOfArticles, loadingNumber] = useCollectionData<INumberOfArticles>(
         firestore.collection("number_of_articles")
     )
@@ -70,20 +79,100 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
         }
 
         if (nameArticle && tags && inputPhotoRef.current.files[0]) {
+            const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_mainPhoto`); // создаем реф
+            uploadBytes(storageRef, article.title.coverPhoto)
+                .then(() => setIsEndLoadingMainPhoto(true)); // загружаем фото
+
+            article.blocks.map(block => {
+                if (block.type === "photo") {
+                    let photos = photosTest;
+                    photos.push(block);
+                    setPhotosTest(photos);
+                }
+            }) // достаем из всех блоков блоки фотографий
+
+            for (let i = 0; i < photosTest.length; i++) {
+                const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_${photosTest[i].id}`);
+                uploadBytes(storageRef, photosTest[i].fileValue)
+                    .then(() => {
+                        if (i === photosTest.length - 1) {
+                            setIsEndLoadingPhotos(true) // меняем флаг. указываем, что все фото были загружены
+                        }
+                    });
+            } // загружаем все фото в БД
+        }
+    }
+
+    useEffect(() => {
+        if (isEndLoadingMainPhoto) {
+            getDownloadURL(ref(storage, `articles_${numberOfArticles[0].number + 1}_mainPhoto`))
+                .then((url) => {
+                    setSrcMainPhoto(url);
+                })
+                .then(() => setIsContinueAfterLoadingMainPhoto(true))
+        } // перебираем главную фотографию и достаем ее src
+    }, [isEndLoadingMainPhoto])
+
+    useEffect(() => {
+        if (isEndLoadingPhotos) {
+            for (let i = 0; i < photosTest.length; i++) {
+                if (i !== photosTest.length - 1) {
+                    getDownloadURL(ref(storage, `articles_${numberOfArticles[0].number + 1}_${photosTest[i].id}`))
+                        .then((url) => {
+                            let src = srcPhotos;
+
+                            src.push(`${photosTest[i].id}_url_` + url)
+
+                            setSrcPhotos(src)
+                        })
+                } else {
+                    getDownloadURL(ref(storage, `articles_${numberOfArticles[0].number + 1}_${photosTest[i].id}`))
+                        .then((url) => {
+                            let src = srcPhotos;
+
+                            src.push(`${photosTest[i].id}_url_` + url)
+
+                            setSrcPhotos(src)
+                        })
+                        .then(() => setIsContinueAfterLoadingPhotos(true))
+                }
+            }
+        } // перебираем все фотографии и достаем их src
+    }, [isEndLoadingPhotos])
+
+    useEffect(() => {
+        if (srcMainPhoto && srcPhotos && isContinueAfterLoadingPhotos && isContinueAfterLoadingMainPhoto) {
+            const getSrc = (id: number) => {
+                let rightSrc;
+
+                srcPhotos.map(src => {
+                    const srcElems = src.split("_url_");
+
+                    if (srcElems[0] === String(id)) {
+                        rightSrc = srcElems[1];
+                    }
+                })
+
+                return rightSrc
+            }
+
             let photos = [];
             let textData = [];
 
             article.blocks.map(block => {
                 if (block.type === "photo") {
+                    const rightSrc = getSrc(block.id)
+
                     const blockPhotoObj = {
                         id: block.id,
                         indent: block.indent,
                         type: block.type,
+                        src: rightSrc
                     }
 
                     textData.push(blockPhotoObj);
                     photos.push(block);
-                } else{
+                } else {
                     textData.push(block);
                 }
             })
@@ -92,23 +181,20 @@ const ModalWindow: React.FC<IModalWindowProps> = ({ setIsOpenModalWindow, articl
                 blocks: textData,
                 title: article.title.header,
                 tags: article.title.tags,
-                id: numberOfArticles[0].number + 1
+                id: numberOfArticles[0].number + 1,
+                srcMainPhoto: srcMainPhoto,
             }
 
-            for (let i = 0; i < photos.length; i++) {
-                const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_${photos[i].id}`);
-                uploadBytes(storageRef, photos[i].fileValue);
+            const sendAllDocs = async () => {
+                await setDoc(doc(firestore, "articles", `articles_${numberOfArticles[0].number + 1}`), { article: objArticle });
+                await setDoc(doc(firestore, "number_of_articles", `number`), { number: numberOfArticles[0].number + 1 });
             }
 
-            const storageRef = ref(storage, `articles_${numberOfArticles[0].number + 1}_mainPhoto`);
-            uploadBytes(storageRef, article.title.coverPhoto);
-
-            await setDoc(doc(firestore, "articles", `articles_${numberOfArticles[0].number + 1}`), { article: objArticle });
-            await setDoc(doc(firestore, "number_of_articles", `number`), { number: numberOfArticles[0].number + 1 });
+            sendAllDocs();
 
             route.push("/admin")
-        }
-    }
+        } // выводим все src
+    }, [srcMainPhoto, srcPhotos, isContinueAfterLoadingPhotos, isContinueAfterLoadingMainPhoto])
 
     useEffect(() => {
         if (tagsValue) {

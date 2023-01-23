@@ -1,32 +1,44 @@
 import React from "react";
 import cl from "./Articles.module.css"
-import firestore from "../../firebase/clientApp"
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { IOneBlock } from "../admin/create_article/Create_article";
 import ArticleCard from "./articleCard/ArticleCard";
 
-export interface IArticleFromDB{
+interface IArticlesProps{
+    articles: IArticleFromDB[]
+}
+
+export interface IArticleFromDB {
     article: IArticleData
 }
 
 // Это потому что в бд объект в объекте
 
-interface IArticleData{
-    blocks: IOneBlock[],
+interface IArticleData {
+    blocks: IBlock[],
     id: number,
     tags: string[],
     title: string,
-} 
+    srcMainPhoto: string,
+}
 
-const Articles = () => {
-    const [articles, loadingArticles] = useCollectionData<IArticleFromDB>(
-        firestore.collection("articles")
-    )
+interface IBlock{
+    id: number,
+    indent: string,
+    type: string,
 
+    fontSize?: number,
+    italics?: boolean,
+    location?: string,
+    thickness?: string,
+    value?:  string,
+
+    src?: string,
+}
+
+const Articles: React.FC<IArticlesProps> = ({articles}) => {
     return (
         <div>
             {
-                !loadingArticles && articles
+                articles
                     ?
                     <div className={cl.articles}>
                         {
