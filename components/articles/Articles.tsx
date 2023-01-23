@@ -12,7 +12,7 @@ export interface IArticleFromDB {
 
 // Это потому что в бд объект в объекте
 
-interface IArticleData {
+export interface IArticleData {
     blocks: IBlock[],
     id: number,
     tags: string[],
