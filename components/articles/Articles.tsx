@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import cl from "./Articles.module.css"
 import ArticleCard from "./articleCard/ArticleCard";
+import { useRouter } from "next/router";
 
-interface IArticlesProps{
-    articles: IArticleFromDB[]
+interface IArticlesProps {
+    articles: IArticleFromDB[],
+    isErrorTags: boolean,
 }
 
 export interface IArticleFromDB {
@@ -20,7 +22,7 @@ export interface IArticleData {
     srcMainPhoto: string,
 }
 
-interface IBlock{
+interface IBlock {
     id: number,
     indent: string,
     type: string,
@@ -29,26 +31,36 @@ interface IBlock{
     italics?: boolean,
     location?: string,
     thickness?: string,
-    value?:  string,
+    value?: string,
 
     src?: string,
 }
 
-const Articles: React.FC<IArticlesProps> = ({articles}) => {
+const Articles: React.FC<IArticlesProps> = ({ articles, isErrorTags }) => {
+    const route = useRouter();
+
+    useEffect(() => {
+        if (isErrorTags) {
+            route.push("/error")
+        }
+    }, [])
+
     return (
-        <div>
+        <div className={cl.window}>
             {
-                articles
+                articles.length
                     ?
-                    <div className={cl.articles}>
-                        {
-                            articles.map( article => 
-                                <ArticleCard article={article} key={article.article.id}/>
-                            )  
-                        }
+                    <div className="container">
+                        <div className={cl.articles}>
+                            {
+                                articles.map(article =>
+                                    <ArticleCard article={article} key={article.article.id} />
+                                )
+                            }
+                        </div>
                     </div>
                     :
-                    <p>LOADING</p>
+                    <p>В данной рубрике еще нет статей</p>
             }
         </div>
     )

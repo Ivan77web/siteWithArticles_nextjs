@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className={cl.navbar}>
             <ul className={cl.menuItems}>
                 <li className={cl.menuItem}>
-                    <Link href={"/top"}>Лучшее</Link>
+                    <Link href={"/allarticles"}>Лучшее</Link>
                 </li>
 
                 <li
@@ -21,15 +21,7 @@ const Navbar = () => {
                 </li>
 
                 <li className={cl.menuItem}>
-                    <Link href={"/"}>Мероприятия</Link>
-                </li>
-
-                <li className={cl.menuItem}>
                     <Link href={"/admin"}>Админ</Link>
-                </li>
-
-                <li className={cl.menuItem}>
-                    Еще что-то
                 </li>
             </ul>
 

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MainContainer from "../../components/mainContainer/MainContainer";
-import { useRouter } from "next/router";
 import ArticlePage from "../../components/articles/articlePage/ArticlePage";
 import { doc, getDoc } from "firebase/firestore";
 import firestore from "../../firebase/clientApp";

@@ -1,17 +1,19 @@
 .card {
-    min-width: 280px;
-    max-width: 280px;
+    position: relative;
+    min-width: 300px;
+    max-width: 300px;
     height: 540px;
     box-shadow: 0 3px 20px rgba(0, 0, 0, .13);
     border-radius: 15px;
     margin: 20px;
     overflow: hidden;
     cursor: pointer;
+    background: white;
 }
 
 .photo {
     width: 100%;
-    max-height: 210px;
+    max-height: 230px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     overflow: hidden;
@@ -20,7 +22,8 @@
 .img {
     object-fit: cover;
     width: 100%;
-    max-height: 210px;
+    max-height: 230px;
+    min-height: 230px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
@@ -40,19 +43,22 @@
     line-height: 1.2;
 }
 
-.opinion{
+.tags{
     width: 90%;
     margin: 0 auto;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    color: #000000;
+    display: flex;
+}
+
+.tag{
     font-size: 14px;
-    line-height: 1.4;
+    color: rgb(79, 79, 79);
 }
 
 .autor{
+    position: absolute;
+    bottom: 30px;
+    left: 5%;
     width: 90%;
-    margin: 0 auto;
     display: flex;
     height: 30px;
 }

@@ -3,17 +3,15 @@ import MainContainer from "../components/mainContainer/MainContainer"
 import { collection, getDocs } from "firebase/firestore";
 import firestore from "../firebase/clientApp"
 
-const top = ({ articles }) => {
+const allarticles = ({ articles }) => {
     return (
         <MainContainer>
-            <div className="container">
-                <Articles articles={articles} />
-            </div>
+            <Articles articles={articles} isErrorTags={false}/>
         </MainContainer>
     )
 }
 
-export default top
+export default allarticles
 
 export async function getStaticProps() {
     let articles = [];

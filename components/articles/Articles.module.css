@@ -1,3 +1,10 @@
+.window{
+    background: #f5f5f6;
+    min-height: calc(100vh - 51px);
+}
+
 .articles{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }

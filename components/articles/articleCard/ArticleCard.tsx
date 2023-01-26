@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { IArticleFromDB } from "../Articles";
-import { getStorage, getDownloadURL, ref } from "firebase/storage";
 import cl from "./ArticleCard.module.css"
 import Link from "next/link";
 
@@ -20,10 +19,16 @@ const ArticleCard: React.FC<IArticleCardProps> = ({ article }) => {
                     {article.article.title}
                 </div>
 
-                <div className={cl.opinion}>
-                    Описание статьи Описание статьи Описание статьи Описание статьи Описание статьи
-                    Описание статьи Описание статьи Описание статьи Описание статьи Описание статьи
-                    Описание статьи Описание статьи Описание статьи Описание статьи Описание статьи
+                <div className={cl.tags}>
+                    {
+                        article.article.tags.map((tag, index) => 
+                            (index === 0)
+                                ?
+                                <p className={cl.tag} key={index}>{tag.toLowerCase()}</p>
+                                :
+                                <p className={cl.tag} key={index}>&nbsp;/ {tag.toLowerCase()}</p>
+                        )
+                    }
                 </div>
 
                 <div className={cl.autor}>

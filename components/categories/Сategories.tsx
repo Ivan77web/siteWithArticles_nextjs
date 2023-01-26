@@ -1,10 +1,11 @@
+import Link from "next/link"
 import React from "react"
+import { allTags } from "../../helpers/allTags"
 import cl from "./Categories.module.css"
 
 interface ICategoriesProps {
     isOpen: boolean
 }
-
 
 const Categories: React.FC<ICategoriesProps> = ({ isOpen }) => {
     return (
@@ -13,25 +14,15 @@ const Categories: React.FC<ICategoriesProps> = ({ isOpen }) => {
                 <div className={cl.categories}>
                     <div className="container">
                         <ul className={cl.categoriesItems}>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
-                            <li className={cl.item}>1 Категория</li>
+                            {
+                                allTags.map( tag => 
+                                    <li className={cl.item}>
+                                        <Link href={`/allarticles/${tag.value}`}>
+                                            {tag.title}
+                                        </Link>
+                                    </li>    
+                                )
+                            }
                         </ul>
                     </div>
                 </div>
